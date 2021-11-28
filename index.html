@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Imposto de renda</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <form>
+        <div>
+            <label>Nome:</label>
+            <input type="text" name="nome" id="nome">
+        </div>
+        <div>
+            <label>Número de dependentes:</label>
+            <input type="text" name="numdependentes" id="numdependentes">
+        </div>
+        <div>
+            <label>Salário bruto:</label>
+            <input type="text" name="salariob" id="salariob">
+        </div>
+        <div>
+            <input type="submit" name="calcular" value="Calcular">
+        </div>
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th id="tableNome">Nome</th>
+                <th id="tableSalarioB">Salario Bruto</th>
+                <th id="tablePorcentagemInss">% desconto INSS</th>
+                <th id="tableInss">Desconto INSS</th>
+                <th id="tablePorcentagemIrpf">% desconto IRPF</th>
+                <th id="tableIrpf">Desconto IRPF</th>
+                <th id="tableSalarioL">Salário Líquido</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+        </tbody>
+    </table>
+</body>
+<script>
+    let form=document.querySelector("form")
+    let tbody=document.querySelector("tbody")
+    form.onsubmit=function(){
+        // pegar
+        let nome=document.querySelector("#nome").value
+        let numdependentes=document.querySelector("#numdependentes").value
+        let salariob=document.querySelector("#salariob").value
+        // calcular
+        let dependentes=numdependentes*189.59
+        let descontoInss=0
+        let inss=0
+        let porcentagemInss=0
+        salariob=parseFloat(salariob)
+        if(salariob<=1100)
+        {
+            descontoInss=salariob*0.075
+            inss=descontoInss
+            porcentagemInss="7,5%"
+        }else if(salariob>=1100.01 && salariob<=2203.48)
+        {
+            descontoInss=salariob*0.09
+            inss=descontoInss-16.50
+            porcentagemInss="9%"
+        }else if(salariob>=2203.49 && salariob<=3305.22)
+        {
+            descontoInss=salariob*0.12
+            inss=descontoInss-82.60
+            porcentagemInss="12%"
+        }else if(salariob>=3305.23 && salariob<=6433.57)
+        {
+            descontoInss=salariob*0.14
+            inss=descontoInss-148.71
+            porcentagemInss="14%"
+        }
+        
+        salariob=salariob-inss
+        let descontoIrpf=""
+        let irpf=""
+        let porcentagemIrpf=""
+        if(salariob<=1903.98)
+        {
+            irpf=0
+            porcentagemIrpf="Isento"
+        }else if(salariob>=1903.99 && salariob<=2826.65)
+        {
+            descontoIrpf=salariob*0.075
+            irpf=descontoIrpf-142.8
+            porcentagemIrpf="7,5%"
+        }else if(salariob>=2826.66 && salariob<=3751.05)
+        {
+            descontoIrpf=salariob*0.15
+            irpf=descontoIrpf-354.8
+            porcentagemIrpf="15%"
+        }else if (salariob>=3751.06 && salariob<=4664.68)
+        {
+            descontoIrpf=salariob*0.225
+            irpf=descontoIrpf-636.13
+            porcentagemIrpf="22,5%"
+        }else if(salariob>=4664.69)
+        {
+            descontoIrpf=salariob*0.275
+            irpf=descontoIrpf-869.36
+            porcentagemIrpf="27,5"
+        }
+        irpf=irpf-dependentes
+        let salariol=salariob-irpf
+
+        inss=inss.toFixed(2)
+        irpf=irpf.toFixed(2)
+        salariol=salariol.toFixed(2)
+        salariob=document.querySelector("#salariob").value
+        // tabela
+        let tr=document.createElement("tr")
+        let tdNome=document.createElement("td")
+        let txNome=document.createTextNode(nome)
+        tdNome.append(txNome)
+        tr.append(tdNome)
+        
+        let tdSalarioB=document.createElement("td")
+        let txSalarioB=document.createTextNode(salariob)
+        tdSalarioB.append(txSalarioB)
+        tr.append(tdSalarioB)
+
+        let tdPorcentoInss=document.createElement("td")
+        let txPorcentoInss=document.createTextNode(porcentagemInss)
+        tdPorcentoInss.append(txPorcentoInss)
+        tr.append(tdPorcentoInss)
+
+        let tdDescontoInss=document.createElement("td")
+        let txDescontoInss=document.createTextNode(inss)
+        tdDescontoInss.append(txDescontoInss)
+        tr.append(tdDescontoInss)
+
+        let tdPorcentoIrpf=document.createElement("td")
+        let txPorcentoIrpf=document.createTextNode(porcentagemIrpf)
+        tdPorcentoIrpf.append(txPorcentoIrpf)
+        tr.append(tdPorcentoIrpf)
+
+        let tdDescontoIrpf=document.createElement("td")
+        let txDescontoIrpf=document.createTextNode(irpf)
+        tdDescontoIrpf.append(txDescontoIrpf)
+        tr.append(tdDescontoIrpf)
+
+        let tdSalarioL=document.createElement("td")
+        let txSalarioL=document.createTextNode(salariol)
+        tdSalarioL.append(txSalarioL)
+        tr.append(tdSalarioL)
+
+        tbody.append(tr)
+        return false
+    }
+</script>
+</html>
